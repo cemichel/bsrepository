@@ -1,0 +1,3636 @@
+openapi: 3.0.1
+info:
+  title: Vonage Open API
+  description: Service for managing accounts
+  version: '1.0'
+servers:
+- url: /api
+tags:
+- name: v1
+  description: Version 1.0 Administrative, Provisioning and Telephony API's
+paths:
+  /next/activate:
+    put:
+      tags:
+      - next
+      - activation
+      - put
+      operationId: put-manage-activate-account
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      - name: account-id
+        in: query
+        description: VBC Account Number
+        schema:
+          type: integer
+      - name: login-id
+        in: query
+        description: User ID performing submission
+        schema:
+          type: string
+      responses:
+        '202':
+          description: accepted for activation (For async operations)
+          content: {}
+        '200':
+          description: activated (For sync operations)
+          content: {}
+        '400':
+          description: error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /next/device/reboot:
+    get:
+      tags:
+      - next
+      - device
+      - get
+      operationId: get-reboot
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      - name: device-id
+        in: query
+        description: Device name to reboot
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /next/device/registrations:
+    get:
+      tags:
+      - next
+      - device
+      - get
+      operationId: get-manage-device-registrations
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /next/provision:
+    get:
+      tags:
+      - next
+      - provisioning
+      - get
+      operationId: get-manage-provision
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      - name: account-id
+        in: query
+        description: VBC Account Number
+        schema:
+          type: integer
+      - name: login-id
+        in: query
+        description: User ID performing submission
+        schema:
+          type: string
+      - name: orginator-id
+        in: query
+        description: Originating Source Platform
+        schema:
+          type: string
+      - name: include-json
+        in: query
+        description: Include export data in response
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: ok
+          content: {}
+    put:
+      tags:
+      - next
+      - provisioning
+      - put
+      operationId: put-manage-provision
+      parameters:
+      - name: account-id
+        in: query
+        description: VBC Account Number
+        schema:
+          type: integer
+      - name: orginator-id
+        in: query
+        description: Originating Source Platform
+        schema:
+          type: string
+      - name: login-id
+        in: query
+        description: User ID performing submission
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+        required: true
+      responses:
+        '202':
+          description: accepted for provisioning
+          content: {}
+        '400':
+          description: Input was invalid
+          content: {}
+    post:
+      tags:
+      - next
+      - provisioning
+      - post
+      operationId: post-manage-provision
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      - name: account-id
+        in: query
+        description: VBC Account Number
+        schema:
+          type: integer
+      - name: login-id
+        in: query
+        description: User ID performing submission
+        schema:
+          type: string
+      - name: orginator-id
+        in: query
+        description: Originating Source Platform
+        schema:
+          type: string
+      - name: include-json
+        in: query
+        description: Include export data in response
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /next/rollback:
+    put:
+      tags:
+      - next
+      - rollback
+      - put
+      operationId: put-rollback-account
+      parameters:
+      - name: customer-id
+        in: query
+        description: Customer ID
+        schema:
+          type: string
+      - name: site-id
+        in: query
+        description: Site ID
+        schema:
+          type: string
+      - name: account-id
+        in: query
+        description: VBC Account Number
+        schema:
+          type: integer
+      - name: login-id
+        in: query
+        description: User ID performing submission
+        schema:
+          type: string
+      - name: migration-id
+        in: query
+        description: Migration ID to rollback
+        schema:
+          type: integer
+      responses:
+        '202':
+          description: accepted for rollback
+          content: {}
+  /v1/utility/health:
+    get:
+      tags:
+      - v1
+      - utility
+      - get
+      operationId: get-validate-services
+      responses:
+        '200':
+          description: ok
+          content: {}
+ 
+    post:
+      tags:
+      - v1
+      - account
+      - post
+      operationId: post-submit-provision-profile
+      parameters:
+      - name: account-id
+        in: path
+        description: VBC Account Number
+        required: true
+        schema:
+          type: string
+      - name: login-id
+        in: query
+        description: Identifier of user submitting this job
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/account-provisioning'
+        required: true
+      responses:
+        '202':
+          description: accepted for provisioning
+          content: {}
+        '403':
+          description: Provided VBC Account status not allowed to configure
+          content: {}
+        '404':
+          description: Provided VBC Account not found
+          content: {}
+      x-codegen-request-body-name: payload
+  /v1/activate/{account-id}:
+    put:
+      tags:
+      - v1
+      - activation
+      - put
+      operationId: put-activation-account
+      parameters:
+      - name: account-id
+        in: path
+        description: VBC Account Number
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/activate'
+        required: true
+      responses:
+        '202':
+          description: accepted for activation
+          content: {}
+      x-codegen-request-body-name: payload
+  /v1/error-codes:
+    get:
+      tags:
+      - v1
+      - error codes
+      - get
+      operationId: get-display-error-codes
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /v1/release:
+    get:
+      tags:
+      - v1
+      - release
+      - get
+      operationId: get-return-release
+      parameters:
+      - name: depth
+        in: query
+        description: Optional Number of revisions to return in change list
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content: {}
+  /v1/task-list:
+    get:
+      tags:
+      - v1
+      - task-list
+      - get
+      operationId: get-display-task-list
+      parameters:
+      - name: locale
+        in: query
+        description: Account Locale
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /v1/device/config-log:
+    get:
+      tags:
+      - v1
+      - device
+      - get
+      summary: Retrieve Device configuration server log (either by mac address or
+        all devices for an account
+      operationId: get-get-device-config-log
+      parameters:
+      - name: mac
+        in: query
+        description: MAC Address of device to retrieve configuration server log for
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: account
+        in: query
+        description: Account number to retrieve device configuration server log for
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+      - name: since-time
+        in: query
+        description: Epoch timestamp to retrieve device configuration server long
+          since
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: get device configuration server log
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/device-configuration-server-log'
+  /v1/device/properties:
+    get:
+      tags:
+      - v1
+      - device
+      - get
+      summary: Retrieve the properties for migrated devices
+      operationId: get-device-properties
+      parameters:
+      - name: account
+        in: query
+        description: Account Number
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: device properties
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/device-properties-response'
+  /v1/device/reboot:
+    post:
+      tags:
+      - v1
+      - device
+      - post
+      operationId: post-device-reboot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reboot'
+        required: true
+      responses:
+        '202':
+          description: Accepted for reboot
+          content: {}
+      x-codegen-request-body-name: payload
+  /v1/device/registration:
+    get:
+      tags:
+      - v1
+      - device
+      - registration
+      summary: Retrieve Device registration status (either by mac address or all devices
+        for an account
+      operationId: get-get-device-status
+      parameters:
+      - name: mac
+        in: query
+        description: MAC Address of device to retrieve registration status for
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: account
+        in: query
+        description: Account number to retrieve device registrations for
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        '200':
+          description: get device registration status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/device-registration-status'
+  /v1/phone-number/status/{phone-number}:
+    get:
+      tags:
+      - v1
+      - phone-number
+      - get
+      operationId: get-phone-number-status
+      parameters:
+      - name: phone-number
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: GDM Phone Number Status
+          content: {}
+  /v1/history/{account-id}:
+    get:
+      tags:
+      - v1
+      - history
+      - get
+      operationId: get-account-batches
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: include-json
+        in: query
+        description: Include original submitted JSON document
+        schema:
+          type: boolean
+      - name: batch-id
+        in: query
+        description: Return only the specified batch
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Retrieve account submission and run history
+          content: {}
+  /v1/ping:
+    get:
+      tags:
+      - v1
+      - ping
+      - get
+      summary: Test if server is running and reachable
+      operationId: get-ping
+      responses:
+        '200':
+          description: alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ping-response'
+  /v1/postman:
+    get:
+      tags:
+      - v1
+      - postman
+      - get
+      summary: Retrieve API as a Postman Collection
+      operationId: get-dump-postman
+      responses:
+        '200':
+          description: ok
+          content: {}
+  /v1/rollback/{account-id}:
+    put:
+      tags:
+      - v1
+      - rollback
+      - put
+      operationId: put-rollback
+      parameters:
+      - name: account-id
+        in: path
+        description: VBC Account Number
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/rollback'
+        required: true
+      responses:
+        '202':
+          description: accepted for rollback
+          content: {}
+      x-codegen-request-body-name: payload
+  /v1/status:
+    get:
+      tags:
+      - v1
+      - status
+      - get
+      operationId: get-jobs-statuses
+      parameters:
+      - name: login-id
+        in: query
+        description: Identifier of user who submitted migration jobs
+        required: true
+        schema:
+          type: string
+      - name: all
+        in: query
+        description: Include all details, including intermediate ones
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: list of job statuses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status-report'
+  /v1/status/{account-id}:
+    get:
+      tags:
+      - v1
+      - status
+      - get
+      operationId: get-job-status
+      parameters:
+      - name: account-id
+        in: path
+        description: VBC Account Number
+        required: true
+        schema:
+          type: string
+      - name: all
+        in: query
+        description: Include all details, including intermediate ones
+        schema:
+          type: boolean
+      - name: batch
+        in: query
+        description: 'Optional Batch Id (if known) for which to retrieve status of
+          this account submission '
+        schema:
+          type: string
+      responses:
+        '200':
+          description: job status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status-report'
+  /v1/transform:
+    post:
+      tags:
+      - v1
+      - transform
+      - post
+      operationId: post-transform
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - extension-sku
+              - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: Input file to transform into Openapi input
+                  format: binary
+                extension-sku:
+                  type: string
+                  description: Extension SKU Required
+                default-email:
+                  type: string
+                  description: Optional email address to use for users without one
+                    specified
+                extension-prefix:
+                  type: string
+                  description: Optional numeric prefix for all extensions
+                extract-extensions:
+                  type: boolean
+                  description: Select extract extension definitions from dump file
+                extract-users:
+                  type: boolean
+                  description: Select extract user definitions from dump file
+                extract-phone-numbers:
+                  type: boolean
+                  description: Select extract phone numbers from dump file
+                account-id:
+                  type: string
+                  description: VBC Account to apply configuration to
+                submit-migration:
+                  type: boolean
+                  description: Submit migration job after processing file
+                login-id:
+                  type: string
+                  description: Identifier of user submitting this job
+        required: true
+      responses:
+        '200':
+          description: Transformed to Openapi specification
+          content: {}
+        '202':
+          description: Accepted for provisioning (if submit-migration is true)
+          content: {}
+        '400':
+          description: Input was invalid
+          content: {}
+        '403':
+          description: Provided VBC Account status not allowed to configure
+          content: {}
+        '404':
+          description: Provided VBC Account not found
+          content: {}
+  /v1/accounts/{account-id}:
+    get:
+      tags:
+      - v1
+      - account
+      - get
+      operationId: AccountCtrl.getAccountServicesByAccountID
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountHalResponse'
+        '404':
+          description: Account not found
+      security:
+      - bearerAuth: []
+      summary: Get account data by ID
+  /v1/accounts/{account-id}/locations:
+    get:
+      operationId: AccountCtrl.getLocationsByAccountID
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationsHalResponse'
+      security:
+      - bearerAuth: []
+      summary: Get account locations data by account ID
+      tags:
+      - v1
+      - account
+      - get
+  /v1/accounts/{account-id}/locations/{location-id}:
+    get:
+      operationId: AccountCtrl.getLocationByID
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - in: path
+        name: location-id
+        required: true
+        schema:
+          type: number
+        description: The Vonage Business Communications location ID
+        example: 327910
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationHalResponse'
+        '404':
+          description: Location not found
+      security:
+      - bearerAuth: []
+      summary: Get location data by account ID and location ID
+      tags:
+      - v1
+      - account
+      - get
+  /v1/accounts/{account-id}/extensions:
+    get:
+      operationId: ExtensionCtrl.getAccountExtensions
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - in: query
+        name: page_size
+        required: false
+        schema:
+          type: number
+        description: Number of records per page
+        example: 10
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: number
+        description: Current page number
+        example: 10
+      - in: query
+        name: location-id
+        required: false
+        schema:
+          type: number
+        description: Filter by location id
+        example: 145214
+      - in: query
+        name: phone_number
+        required: false
+        schema:
+          type: string
+        description: Filter by phone number
+        example: '14155550100'
+      - in: query
+        name: login_name
+        required: false
+        schema:
+          type: string
+        description: Filter by login name
+        example: jsmith
+      - in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        description: Filter by email address
+        example: john.smith@example.com
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndUserRouteHalResponse'
+        '400':
+          description: Invalid parameters given
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorsResponse'
+      security:
+      - bearerAuth: []
+      summary: Get account extensions data by account ID
+      tags:
+      - v1
+      - account
+      - extension
+      - get
+  /v1/accounts/{account-id}/extensions/{external-id}:
+    get:
+      operationId: ExtensionCtrl.getAccountExtensionByID
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - in: path
+        name: external-id
+        required: true
+        schema:
+          type: number
+        description: The unique id of the extension
+        example: 789
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AltEndUserRouteHalResponse'
+        '404':
+          description: Extension not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get extension data by account ID and extension ID
+      tags:
+      - v1
+      - account
+      - extension
+      - get
+  /v1/accounts/{account-id}/users:
+    get:
+      operationId: UserCtrl.getUsers
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - in: query
+        name: page_size
+        required: false
+        schema:
+          type: number
+        description: Number of records per page
+        example: 10
+      - in: query
+        name: page
+        required: false
+        schema:
+          type: number
+        description: Current page number
+        example: 10
+      - in: query
+        name: first_name
+        required: false
+        schema:
+          type: string
+        description: Filter by first name
+        example: John
+      - in: query
+        name: last_name
+        required: false
+        schema:
+          type: string
+        description: Filter by last name
+        example: Smith
+      - in: query
+        name: login_name
+        required: false
+        schema:
+          type: string
+        description: Filter by login name
+        example: jsmith
+      - in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        description: Filter by email address
+        example: john.smith@example.com
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersHalResponse'
+        '400':
+          description: Invalid parameters given
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorsResponse'
+      security:
+      - bearerAuth: []
+      summary: Get account users data by account ID
+      tags:
+      - v1
+      - accounts
+      - users
+      - get
+  /v1/accounts/{account-id}/users/{user-id}:
+    get:
+      operationId: UserCtrl.getUserByID
+      parameters:
+      - $ref: '#/components/parameters/AccountID'
+      - in: path
+        name: user-id
+        required: true
+        schema:
+          type: number
+        description: The Vonage Business Communications user ID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserHalResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+      - bearerAuth: []
+      summary: Get user data by account ID and user ID
+      tags:
+      - v1
+      - accounts
+      - user
+      - get
+  /v1/accounts/{account-id}/calls:
+    get:
+      operationId: GetCalls
+      tags:
+      - v1
+      - accounts
+      - calls
+      - get
+      summary: Get list of active calls for a given account (paginated). Please use
+        Reports API to get list of completed calls.
+      parameters:
+      - name: extension
+        in: query
+        schema:
+          type: string
+          example: 1234
+      - name: page_size
+        in: query
+        description: Return max this amount of calls in the response.
+        schema:
+          type: string
+          example: 100
+          default: 100
+      - name: order
+        in: query
+        description: Either ascending or descending order.<br/>Must be one of `asc`
+          or `desc`.
+        schema:
+          type: string
+          example: asc
+      - name: start_time
+        in: query
+        description: Return the calls that occurred after this point in time.<br/>Should
+          be of type `epoch` with seconds precision.
+        schema:
+          type: string
+          example: 1595955770
+      - name: end_time
+        in: query
+        description: Return the calls that occurred before this point in time.<br/>Should
+          be of type `epoch` with seconds precision.
+        schema:
+          type: integer
+          example: 1595955770
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallsPaginated'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CallsPaginated'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+    post:
+      operationId: postCalls
+      tags:
+      - v1
+      - accounts
+      - calls
+      - post
+      summary: Create a new call
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      requestBody:
+        description: Request body description
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallPostRequestBody'
+        required: true
+      responses:
+        '200':
+          description: 200 response
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StatusMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusMessage'
+        '400':
+          description: 400 response
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+        '401':
+          description: 401 response
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-codegen-request-body-name: body
+  /v1/accounts/{account-id}/calls/{call-id}:
+    get:
+      operationId: getCallsByCallId
+      tags:
+      - v1 
+      - accounts
+      - calls
+      - get
+      summary: Get details for a specific active call.
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Call'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Call'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+    put:
+      operationId: putCallsByCallId
+      tags:
+      - v1
+      - accounts
+      - calls
+      - put
+      summary: Update an existing call
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 12345
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: c91150a6-8cc4-4e73-9fef-17fd925c6448
+      requestBody:
+        description: "To answer a call: 'state' should be 'active', and 'to' should\
+          \ include the VH id of the device answering the call. To transfer a call:\
+          \ 'state' should not be specified. Both 'to' and 'from' should be specified.\
+          \ To park a call: 'state' should be 'parked', and 'from' should be specified.\n\
+          \ <br>"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallPutRequestBody'
+        required: true
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyCallResponse'
+        '400':
+          description: 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-codegen-request-body-name: body
+    delete:
+      operationId: deleteCallByCallId
+      tags:
+      - v1
+      - accounts
+      - calls
+      - delete
+      summary: Delete a call resource
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyCallResponse'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ModifyCallResponse'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  /v1/accounts/{account-id}/calls/{call-id}/legs:
+    get:
+      operationId: getCallLegs
+      tags:
+      - v1
+      - accounts
+      - calls
+      - legs
+      - get
+      summary: Get list of legs for a given active call
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallLegList'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CallLegList'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  /v1/accounts/{account-id}/calls/{call-id}/legs/{leg-id}:
+    get:
+      operationId: getCallLegByLegId
+      tags:
+      - v1
+      - accounts
+      - calls
+      - legs
+      - get
+      summary: Get details for a specific active call leg
+      parameters:
+      - name: leg-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallLeg'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/CallLeg'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+    put:
+      operationId: updateCallLegByLegId
+      tags:
+      - v1
+      - accounts
+      - calls
+      - legs
+      - put
+      summary: Modify a call leg.
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      - name: leg-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      requestBody:
+        description: Perform hold or unhold or send dtmf or transfer on the call leg.
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - title: Hold
+                x-tab-id: Hold
+                oneOf:
+                - title: Held
+                  x-tab-id: Held
+                  type: object
+                  properties:
+                    state:
+                      type: string
+                      example: held
+                - title: Unhold
+                  x-tab-id: Unhold
+                  type: object
+                  properties:
+                    state:
+                      type: string
+                      example: active
+              - title: DTMF
+                x-tab-id: DTMF
+                type: object
+                properties:
+                  dtmf:
+                    type: string
+                    example: '*123#'
+              - title: Play Sound
+                x-tab-id: Play Sound
+                type: object
+                properties:
+                  stream:
+                    type: boolean
+                    example: true
+                  stream_url:
+                    type: string
+                    example: https://example.com/recorded_message.wav
+              - title: Stop Sound
+                x-tab-id: Stop Sound
+                type: object
+                properties:
+                  stream:
+                    type: boolean
+                    example: false
+              - title: Blind XFER
+                x-tab-id: Blind XFER
+                type: object
+                properties:
+                  state:
+                    type: string
+                    example: active
+                  to:
+                    type: object
+                    example: '{''destination'': Contact, ''type'': ttype}'
+              - title: ATT XFER
+                x-tab-id: ATT XFER
+                type: object
+                properties:
+                  state:
+                    type: string
+                    example: active
+                  to:
+                    type: object
+                    example: '{''destination'': leg-id,''type'': ''leg''}'
+              - title: Active
+                x-tab-id: Active
+                type: object
+                properties:
+                  state:
+                    type: string
+                    example: active
+              - title: Record
+                x-tab-id: Record
+                oneOf:
+                - title: CCR Start
+                  x-tab-id: CCR Start
+                  type: object
+                  properties:
+                    recording:
+                      type: string
+                      example: start
+                    service:
+                      type: string
+                      example: ccr
+                - title: CCR Stop
+                  x-tab-id: CCR Stop
+                  type: object
+                  properties:
+                    recording:
+                      type: string
+                      example: stop
+                    service:
+                      type: string
+                      example: ccr
+                - title: OCR Start
+                  x-tab-id: OCR Start
+                  type: object
+                  properties:
+                    recording:
+                      type: string
+                      example: start
+                    service:
+                      type: string
+                      example: ocr
+                - title: OCR Stop
+                  x-tab-id: OCR Stop
+                  type: object
+                  properties:
+                    recording:
+                      type: string
+                      example: stop
+                    service:
+                      type: string
+                      example: ocr
+        required: true
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyLegResponse'
+        '400':
+          description: 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+        '409':
+          description: 409 response if conflict while changing state of a leg
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+      x-codegen-request-body-name: body
+    delete:
+      operationId: updateCallLeg
+      tags:
+      - v1
+      - accounts
+      - calls
+      - legs
+      - delete
+      summary: Delete a call leg.
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: call-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      - name: leg-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      responses:
+        '204':
+          description: 204 response
+          content: {}
+        '400':
+          description: 400 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+        '409':
+          description: 409 response if conflict while changing state of a leg
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  /v1/accounts/{account-id}/devices:
+    get:
+      operationId: getDevices
+      tags:
+      - v1
+      - accounts
+      - devices
+      - get
+      summary: Get account device's registration info
+      parameters:
+      - name: page_size
+        in: query
+        description: Return max this number of devices in the response.
+        schema:
+          type: string
+          default: 100
+          example: 10
+      - name: order
+        in: query
+        description: Either ascending or descending order.<br/>Must be one of `asc`
+          or `desc`.
+        schema:
+          type: string
+          example: asc
+      - name: start_time
+        in: query
+        description: Return the devices that were registered after this point in time.<br/>Should
+          be of type `epoch` with seconds precision.
+        schema:
+          type: string
+          example: 1595955770
+      - name: end_time
+        in: query
+        description: Return the devices that were registered before this point in
+          time.<br/>Should be of type `epoch` with seconds precision.
+        schema:
+          type: integer
+          example: 1595955770
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountsRegPaginated'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AccountsRegPaginated'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  /v1/accounts/{account-id}/devices/{device-id}:
+    get:
+      operationId: getDeviceByDeviceId
+      tags:
+      - Device registration
+      summary: Get device registration info
+      parameters:
+      - name: account-id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1234
+      - name: device-id
+        in: path
+        description: Mac address of device
+        required: true
+        schema:
+          type: string
+          example: 38-99-62-93-E2-A9
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationInfo'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RegistrationInfo'
+        '401':
+          description: 401 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthorizationErrorMessage'
+        '404':
+          description: 404 response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/NotFoundMessage'
+      security:
+      - bearerAuth: []
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+components:
+  schemas:
+    ping-response:
+      title: Ping Response
+      type: object
+      properties:
+        message:
+          type: string
+          description: Descriptive Text
+        stamp:
+          type: string
+          description: Server Timestamp
+    account-provisioning:
+      title: Provisioning Request
+      required:
+      - system
+      type: object
+      properties:
+        system:
+          title: System Level
+          required:
+          - anonymous-call-rejection
+          - block-outbound-caller-id
+          type: object
+          properties:
+            account-super-user:
+              type: string
+              description: User ID of user to assign as ASU for account
+              example: greenguy01
+            anonymous-call-rejection:
+              type: boolean
+              description: enable / disable ACR for this account
+              example: false
+            caller-id:
+              type: string
+              description: phone number to use as default outbound caller id
+              example: '17329991234'
+            block-outbound-caller-id:
+              type: boolean
+              description: block outbound caller-id for all extensions
+              example: false
+            music-on-hold:
+              type: array
+              description: List of sound file URLs for Music on Hold
+              example:
+              - http://foo.bar.com/path/to/moh-1.wav
+              - http://foo.bar.com/path/to/moh-2.wav
+              items:
+                type: string
+                format: url
+            notification-url:
+              type: string
+              description: Call Back URL for job notification
+              format: uri
+              example: http://notify.vonage.com/status
+        phone-numbers:
+          title: Phone Number Provisioning
+          type: array
+          description: Phone numbers assigned to this account, in E.164 format
+          example:
+          - '17329991234'
+          - '1732500100'
+          items:
+            type: string
+        users:
+          title: User Provisioning
+          type: array
+          description: users provisioned to this account
+          items:
+            title: Account User
+            type: object
+            properties:
+              first-name:
+                type: string
+                description: users first name
+                example: Bruce
+              last-name:
+                type: string
+                description: users last name
+                example: Banner
+              email:
+                type: string
+                description: users email address
+                format: email
+              login-name:
+                type: string
+                description: users unique account login id
+                example: greenguy01
+              phone:
+                type: string
+                description: users contact phone number
+                example: '17329991000'
+              is-admin:
+                type: boolean
+                description: user is an account administrator
+                default: false
+              allow-login:
+                type: boolean
+                description: user is allowed UI login
+                default: false
+              call-monitoring:
+                type: array
+                items:
+                  title: Call Monitoring
+                  required:
+                  - allowed-extensions
+                  - pin
+                  - source-extension
+                  type: object
+                  properties:
+                    sku:
+                      type: string
+                      description: Product SKU for this service
+                      example: SKU-000000
+                    source-extension:
+                      type: string
+                      description: Extension to allow call monitoring from
+                      example: '403'
+                    pin:
+                      pattern: ^[0-9]{4,10}$
+                      type: string
+                      description: 4-10 digit access pin
+                      example: '1234'
+                    allowed-extensions:
+                      type: array
+                      description: Extensions that can be monitored from this extension
+                      example:
+                      - '406'
+                      - '407'
+                      items:
+                        type: string
+                    disclaimer-audio-file:
+                      type: string
+                      description: Endpoint from which to pull disclaimer audio recording
+                      format: url
+                      example: http://foo.bar.com/my-monitoring-disclaimer.wav
+        extension:
+          title: Extension Provisioning
+          type: array
+          description: Extensions Provisioned to this account
+          items:
+            title: Extension Settings
+            required:
+            - extension-number
+            - sku
+            type: object
+            properties:
+              sku:
+                type: string
+                example: SKU-000000
+              extension-number:
+                type: string
+                example: '303'
+              user-login-name:
+                type: string
+                example: greenguy01
+              phone-numbers:
+                type: array
+                description: Direct-dial phone numbers assigned to this extension,
+                  in E.164 format
+                example:
+                - '17329991234'
+                - '1732500100'
+                items:
+                  type: string
+              voice-mail:
+                title: Extension Voicemail Settings
+                type: object
+                properties:
+                  pin:
+                    pattern: ^[0-9]{4,6}$
+                    type: string
+                    description: 4 to 6 digit voicemail access pin
+                    example: '1234'
+                  email:
+                    type: string
+                    description: e-mail address to forward messages to
+                    format: email
+                  greetings:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: URL location of name greeting for this mailbox
+                        format: uri
+                        example: http://foo.bar.com/path/to/name-announcement.wav
+                      busy:
+                        type: string
+                        description: URL location of busy greeting for this mailbox
+                        format: uri
+                        example: http://foo.bar.com/path/to/busy-greeting.wav
+                      unavailable:
+                        type: string
+                        description: URL location of unavailable greeting for this
+                          mailbox
+                        format: uri
+                        example: http://foo.bar.com/path/to/unavailable-greeting.wav
+                    description: links to current voicemail greeting recordings to
+                      be migrated
+                  send-email:
+                    type: boolean
+                    description: Enable sending voicemail messages to configured email
+                      address
+                    example: true
+                  delete-after-sending-email:
+                    type: boolean
+                    description: Delete message from voicemail box after sending email
+                    example: false
+                  play-automated-prompt:
+                    type: boolean
+                    description: Play automated prompt when answering calls
+                    example: false
+                  exit-and-forward:
+                    required:
+                    - destination
+                    - value
+                    type: object
+                    properties:
+                      destination:
+                        type: string
+                        description: 'Type of routing destination: extension or phone-number'
+                        example: extension
+                        enum:
+                        - extension
+                        - phone-number
+                      value:
+                        type: string
+                        description: Number to forward call to
+                        example: '402'
+                    description: Optionally provide option to forward call if answered
+                      by voicemail
+              devices:
+                title: Extension Devices
+                type: array
+                description: Devices Provisioned to this extension
+                items:
+                  title: Device Provisioning
+                  required:
+                  - name
+                  - type
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      description: Name of the device
+                      example: Desk Phone
+                    type:
+                      type: string
+                      description: Provisioning model of the device
+                      example: yealink
+                    part-number:
+                      type: string
+                      description: Part number of the device
+                      example: Polycom-VVX500
+                    mac-address:
+                      pattern: ^([a-fA-F0-9]{2}:){5}([a-fA-F0-9]{2})$|^[a-fA-F0-9]{12}$
+                      type: string
+                      description: MAC address of the device, when applicable
+                      format: mac
+                      example: 00:1a:2b:3c:4d:5e
+                    macCode:
+                      type: string
+                      description: MAC Code for Gigaset Devices
+                      example: 589EC603B446-6ADC
+                    baseCode:
+                      type: string
+                      description: Base Code for Gigaset Devices
+                      example: 6ADC832714C0
+                    line-appearances:
+                      title: Line Appearances
+                      required:
+                      - expansion-only
+                      - extensions
+                      - type
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: 'Type of routing destination: busy lamp field
+                            (BLF) or shared line appearance (SLA)'
+                          example: BLF
+                          enum:
+                          - BLF
+                          - SLA
+                        extensions:
+                          type: array
+                          description: Extension numbers to be appear on this device
+                          example:
+                          - '404'
+                          - '405'
+                          items:
+                            type: string
+                        expansion-only:
+                          type: boolean
+                          description: Restrict placement to buttons on expansion
+                            (sidecar) device
+                          example: false
+                      description: Additional Line Appearances
+              inbound-call-rules:
+                title: Extension Inbound Rules
+                type: object
+                properties:
+                  call-routing:
+                    type: array
+                    items:
+                      title: Inbound Call Route Rules
+                      required:
+                      - type
+                      - value
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: 'Indicate which order these rules will be executed:
+                            sequential or parallel'
+                          example: sequential
+                          enum:
+                          - sequential
+                          - parallel
+                        value:
+                          type: array
+                          items:
+                            required:
+                            - destination
+                            - value
+                            type: object
+                            properties:
+                              destination:
+                                type: string
+                                description: 'Type of routing destination: self, extension,
+                                  phone-number, or voicemail.'
+                                example: voicemail
+                                enum:
+                                - self
+                                - voicemail
+                                - extension
+                                - phone-number
+                              value:
+                                type: string
+                                description: Route destination number
+                                example: '401'
+                              ring-time:
+                                type: integer
+                                description: Ringing time, in seconds, for this destination.
+                                example: 30
+                  call-continuity-number:
+                    type: string
+                    description: Phone number calls should forward to if this extension's
+                      device is not registered to the network. Requires at least one
+                      direct-dial phone number to be assigned to this extension.
+                    example: '17325550312'
+              outbound-call-rules:
+                title: Outbound Call Rules
+                type: object
+                properties:
+                  dial-prefix:
+                    type: string
+                    description: Dial prefix for local dialing
+                    example: '732'
+                  block-international-calls:
+                    type: boolean
+                    description: Block outgoing international calls from this extension
+                    example: false
+                  caller-id-number:
+                    type: string
+                    description: Phone number to be used as this extension's Caller
+                      ID
+                    example: '17325550123'
+                  block-caller-id:
+                    type: boolean
+                    description: Block outgoing Caller ID on all calls from this extension
+                    example: false
+        auto-attendants:
+          title: Auto Attendant Provisioning
+          type: array
+          items:
+            required:
+            - actions
+            - extension
+            - name
+            type: object
+            properties:
+              extension:
+                type: string
+                description: Extension Number Assigned to this Auto Attendant
+                example: '302'
+              name:
+                type: string
+                description: Descriptive Name for this Auto Attendant
+                example: Main Auto Attendant
+              phone-number:
+                type: array
+                description: Optional list of phone numbers assigned to this Auto
+                  Attendant
+                example:
+                - '17329991234'
+                - '1732500100'
+                items:
+                  type: string
+              actions:
+                type: array
+                items:
+                  title: Auto Attendant Action
+                  type: object
+                  properties:
+                    forward:
+                      title: Auto Attendant Forward Action
+                      required:
+                      - destination
+                      - value
+                      type: object
+                      properties:
+                        pre-action:
+                          title: Auto Attendant Pre Action
+                          type: object
+                          properties:
+                            value:
+                              type: string
+                              description: Route destination number
+                              example: '401'
+                            ring-time:
+                              type: integer
+                              description: Ringing time, in seconds, for this destination.
+                              example: 30
+                          description: Optional live operator destination before this
+                            action
+                        audio-file:
+                          type: string
+                          description: Endpoint from which to pull this actions audio
+                            recording
+                          format: uri
+                          example: http://localhost:8088/media.wav
+                        destination:
+                          type: string
+                          description: One of ext, phone, vm
+                          enum:
+                          - ext
+                          - phone
+                          - vm
+                        value:
+                          type: string
+                          description: 'Endpoint that this action forwards to '
+                          example: '418'
+                        schedule:
+                          type: array
+                          items:
+                            title: Schedule
+                            required:
+                            - days-of-week
+                            - end-time
+                            - start-time
+                            type: object
+                            properties:
+                              days-of-week:
+                                type: array
+                                description: numeric value specifying the day(s) of
+                                  the week 0=Sunday 6=Saturday
+                                example:
+                                - 1
+                                - 2
+                                - 3
+                                items:
+                                  maximum: 6
+                                  minimum: 0
+                                  type: number
+                              start-time:
+                                pattern: ^([01]\d|2[0-3]):?([0-5]\d)$
+                                type: string
+                                description: Start time in 24 hour format HH:MM
+                                example: 07:30
+                              end-time:
+                                pattern: ^([01]\d|2[0-3]):?([0-5]\d)$
+                                type: string
+                                description: End time in 24 hour format HH:MM
+                                example: 1080
+                    announce:
+                      title: Auto Attendant Announcement Action
+                      type: object
+                      properties:
+                        pre-action:
+                          $ref: '#/components/schemas/account-provisioning/properties/auto-attendants/items/properties/actions/items/properties/forward/properties/pre-action'
+                        audio-file:
+                          type: string
+                          description: Endpoint from which to pull this actions audio
+                            recording
+                          format: uri
+                          example: http://www.google.com/corp-announce.wav
+                        schedule:
+                          $ref: '#/components/schemas/account-provisioning/properties/auto-attendants/items/properties/actions/items/properties/forward/properties/schedule'
+                        loop:
+                          type: boolean
+                          description: Endpoint from which to pull this actions audio
+                            recording
+                    menu:
+                      title: Auto Attendant Menu Item
+                      type: object
+                      properties:
+                        pre-action:
+                          $ref: '#/components/schemas/account-provisioning/properties/auto-attendants/items/properties/actions/items/properties/forward/properties/pre-action'
+                        audio-file:
+                          type: string
+                          description: Endpoint from which to pull this menu items
+                            audio recording
+                          format: uri
+                          example: http://my.media.org/press2.wav
+                        schedule:
+                          $ref: '#/components/schemas/account-provisioning/properties/auto-attendants/items/properties/actions/items/properties/forward/properties/schedule'
+                        allow-dial-any:
+                          type: boolean
+                          description: Allow dialing extension at any time
+                          default: true
+                        menu-options:
+                          type: array
+                          description: DTMF menu options
+                          items:
+                            title: DTMF Menu Assignment
+                            required:
+                            - action
+                            - dtmf-digit
+                            type: object
+                            properties:
+                              dtmf-digit:
+                                pattern: ^[0-9,*,#]{1}$
+                                type: string
+                                description: DTMF dial digit this action applies to
+                                  [0-9,#,*]
+                                example: '#'
+                              action:
+                                type: string
+                                description: action to take when this digit is pressed
+                                enum:
+                                - call
+                                - transfer
+                                - dial-by-name
+                                - previous
+                                - repeat
+                              value:
+                                type: string
+                                description: Extension or phone number this option
+                                  calls or transfers to
+                                example: '409'
+        call-group:
+          title: Call Group Provisioning
+          type: array
+          description: Call Groups provisioned to this account
+          items:
+            title: Call Group Settings
+            required:
+            - extension-number
+            - sku
+            type: object
+            properties:
+              sku:
+                type: string
+                example: SKU-000000
+              extension-number:
+                type: string
+                example: '203'
+              name:
+                type: string
+                description: Descriptive name for this call group
+                example: My Call Group
+              phone-numbers:
+                type: array
+                description: Direct-dial phone numbers assigned to this call group,
+                  in E.164 format
+                example:
+                - '17329991234'
+                - '1732500100'
+                items:
+                  type: string
+              voice-mail:
+                title: Call Group Voice Mail Settings
+                type: object
+                properties:
+                  pin:
+                    pattern: ^[0-9]{4,6}$
+                    type: string
+                    description: 4 to 6 digit voicemail access pin
+                    example: '1234'
+                  email:
+                    type: string
+                    description: e-mail address to forward messages to
+                    format: email
+                  greetings:
+                    type: object
+                    properties:
+                      unavailable:
+                        type: string
+                        description: URL location of unavailable greeting for this
+                          mailbox
+                        format: uri
+                        example: http://foo.bar.com/path/to/unavailable-greeting.wav
+                    description: links to current voicemail greeting recordings to
+                      be migrated
+                  send-email:
+                    type: boolean
+                    description: Enable sending voicemail messages to configured email
+                      address
+                    example: true
+                  delete-after-sending-email:
+                    type: boolean
+                    description: Delete message from voicemail box after sending email
+                    example: false
+                  play-automated-prompt:
+                    type: boolean
+                    description: Play automated prompt when answering calls
+                    example: false
+              inbound-call-rules:
+                title: Call Group Inbound Rules
+                type: object
+                properties:
+                  call-routing:
+                    type: array
+                    items:
+                      title: Call Group Inbound Call Route Rules
+                      required:
+                      - type
+                      - value
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          description: 'Indicate which order these rules will be executed:
+                            sequential or parallel'
+                          example: sequential
+                          enum:
+                          - sequential
+                          - parallel
+                        value:
+                          type: array
+                          items:
+                            required:
+                            - destination
+                            - value
+                            type: object
+                            properties:
+                              destination:
+                                type: string
+                                description: 'Type of routing destination: extension,
+                                  voicemail, or announcement.'
+                                example: voicemail
+                                enum:
+                                - voicemail
+                                - extension
+                                - announcement
+                              value:
+                                type: string
+                                description: Route destination number for voicemail
+                                  or extension; URL to recording file for announcement
+                                example: '401'
+                              ring-time:
+                                type: integer
+                                description: Ringing time, in seconds, for this destination.
+                                example: 30
+              allow-dial-by-name:
+                type: boolean
+                description: Include Call Group in Dial-By-Name Directory
+                example: false
+        call-recording:
+          title: Call Recording Provisioning
+          type: object
+          properties:
+            system:
+              title: System Call Recording Provisioning
+              required:
+              - rules
+              - sku
+              type: object
+              properties:
+                sku:
+                  type: string
+                  example: SKU-000000
+                rules:
+                  type: array
+                  items:
+                    title: System Call Recording Rule
+                    required:
+                    - name
+                    - owner-user-name
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: Name of this rule
+                        example: My Recording Rule
+                      owner-user-name:
+                        type: string
+                        description: Login name of the user that owns this rule
+                        example: greenguy01
+                      inbound-calls:
+                        type: boolean
+                        description: Enable recording of inbound (received) calls
+                        example: true
+                      outbound-calls:
+                        type: boolean
+                        description: Enable recording of outbound (placed) calls
+                        example: false
+                      extensions:
+                        type: array
+                        description: List of extensions whose calls will be recorded
+                        example:
+                        - '403'
+                        - '404'
+                        items:
+                          type: string
+                      notification-tone:
+                        type: boolean
+                        description: Enables a periodic tone to notify remote party
+                          that call is being recorded
+                        example: false
+                      schedule:
+                        title: System Call Recording Schedule
+                        type: object
+                        properties:
+                          days-of-week:
+                            type: array
+                            description: numeric value specifying the day(s) of the
+                              week 0=Sunday 6=Saturday
+                            example:
+                            - 1
+                            - 2
+                            - 3
+                            items:
+                              maximum: 6
+                              minimum: 0
+                              type: number
+                        description: System call recording rule schedule
+                    description: System call recording rule
+              description: System call recording provisioning
+          description: Call Recording Provisioning
+    activate:
+      title: Account Activation Request
+      type: object
+      properties:
+        notification-url:
+          type: string
+          description: Call Back URL to send completion status to
+          format: uri
+          example: http://notify.vonage.com/status/1782999
+      description: Activate the VBC Account under this resource
+    rollback:
+      title: Account Rollback Request
+      required:
+      - authorized-by
+      type: object
+      properties:
+        authorized-by:
+          type: string
+          description: Person authorizing this rollback
+          example: Joe Manager
+        notification-url:
+          type: string
+          description: Call Back URL to send completion status to
+          format: uri
+          example: http://notify.vonage.com/status/1782999
+        devices:
+          title: Rollback Devices
+          type: array
+          description: Devices to rollback and their properties
+          items:
+            title: Device DeProvisioning
+            required:
+            - mac-address
+            - provision-url
+            type: object
+            properties:
+              mac-address:
+                pattern: ^([a-fA-F0-9]{2}:){5}([a-fA-F0-9]{2})$|^[a-fA-F0-9]{12}$
+                type: string
+                description: MAC address of the device
+                format: mac
+                example: 00:1a:2b:3c:4d:5e
+              provision-url:
+                type: string
+                description: URL to the rollback provisioning server
+                format: url
+                example: http://provision.vonagelabs.com/path/to/resource
+              provision-username:
+                type: string
+                description: Username to be presented to rollback provisioning server
+                example: deviceuser
+              provision-password:
+                type: string
+                description: Password to be presented to rollback provisioning server
+                example: supersecret
+      description: Rollback Migrated Account
+    status-report:
+      title: Status
+      type: object
+      properties:
+        account-number:
+          type: integer
+          description: VBC Account Number identifying the account being provisioned
+          example: 12345
+        id:
+          type: integer
+          description: ID associated with this provisioning submission
+          example: 1761
+        account-name:
+          type: string
+          description: String describing the account being provisioned
+          example: My Test Account Inc
+        status:
+          type: string
+          description: status of provisioning for this account
+          example: PROVISIONING COMPLETE
+        code:
+          type: integer
+          description: status code for the current state
+          example: 1200
+        detail:
+          type: array
+          description: Details of migration status
+          items:
+            type: object
+            properties:
+              note:
+                type: string
+                description: Descriptive note for this status item
+                example: Task Failed
+              task:
+                type: string
+                description: Sub-task that generated this status item, if available
+                example: validate-skus
+              stamp:
+                type: string
+                description: Timestamp of this status item
+                example: 2019-01-07 20:49:08
+              status:
+                type: integer
+                description: Status code of this status item
+                example: 1300
+        devices:
+          type: array
+          description: Details of migrated devices
+          items:
+            type: object
+            properties:
+              mac-address:
+                type: string
+                description: Device MAC address
+                example: 00:1a:2b:3c:4d:5e
+              provision-server:
+                type: string
+                description: Address of the provision server the device should download
+                  profile from
+                example: provision.vonage.com
+              hash-path:
+                type: string
+                description: Path directory the device should download profile from
+                  on provision server
+                example: a1b2c3d4w5x6y7z8
+              encrypt-key:
+                type: string
+                description: Encryption key the device should use to decrypt profile
+                example: a1b2c3d4w5x6y7z8
+    device-registration-status:
+      title: Device Registration Response
+      type: array
+      description: Device Registration Status
+      items:
+        type: object
+        properties:
+          account:
+            type: integer
+            description: VBC Account number the registrations are associated with
+          mac-address:
+            type: string
+            description: Hardware Mac Address for this Device (may be blank if softphone)
+          extension:
+            type: string
+            description: Extension Number this device is associated with
+          sip-id:
+            type: string
+            description: VBC SIP ID for this device
+          model:
+            type: string
+            description: Device provisioning model of this device
+          registered:
+            type: boolean
+            description: True if the device is currently registered
+          registrar:
+            type: string
+            description: Registrar or registrar IP that this devices is registered
+              through (if known)
+          user-agent:
+            type: string
+            description: User Agent this device reports when registered
+    device-properties-response:
+      title: Device Properties Response
+      type: object
+      properties:
+        account:
+          type: integer
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/device-properties'
+    device-properties:
+      title: Device Properties
+      type: object
+      properties:
+        mac-address:
+          type: string
+        provision-server:
+          type: string
+        hash-path:
+          type: string
+        encrypt-key:
+          type: string
+    device-configuration-server-log:
+      title: Device Configuration Server Log Response
+      type: array
+      description: Device Configuration Server Log
+      items:
+        type: object
+        properties:
+          mac-address:
+            type: string
+            description: Hardware Mac Address for this Device
+            example: 001A2B3C4D5E
+          history:
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: History event type
+                  example: SUCCESS
+                timestamp:
+                  type: integer
+                  description: Epoch timestamp of history event
+                  example: 1546962678970
+                user-agent:
+                  type: string
+                  description: User Agent this device reports when downloading profile
+                  example: Cisco/SPA504G-7.5.5
+                device-ip:
+                  type: string
+                  description: IP Address of device when downloading profile
+                  example: 10.200.18.43:49636
+    reboot:
+      title: Device Reboot Request
+      type: object
+      properties:
+        accounts:
+          type: array
+          description: List of VBC accounts to reboot device for
+          example:
+          - 700100
+          - 7001111
+          - 802431
+          items:
+            type: integer
+        devices:
+          type: array
+          description: List of Device Mac Addresses to reboot
+          example:
+          - 98:01:a7:a4:ce:53
+          - 98:01:a7:a4:ce:54
+          items:
+            pattern: ^[a-fA-F0-9:]{17}|[a-fA-F0-9]{12}$
+            type: string
+            format: mac
+      description: Submit Request for Device Reboot
+    FirstHref:
+      type: object
+      properties:
+        href:
+          type: string
+      description: URL to the first page of records
+    PrevHref:
+      type: object
+      properties:
+        href:
+          type: string
+      description: URL to the previous page of records
+    SelfHref:
+      type: object
+      properties:
+        href:
+          type: string
+      description: URL to the current page of records
+    NextHref:
+      type: object
+      properties:
+        href:
+          type: string
+      description: URL to the next page of records
+    LastHref:
+      type: object
+      properties:
+        href:
+          type: string
+      description: URL to the last page of records
+    Location:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 327910
+          description: Unique identifier of the location
+        name:
+          type: string
+          example: Headquarters
+          description: Name of the location
+        address:
+          $ref: '#/components/schemas/AddressWithTimeZone'
+    Account:
+      properties:
+        id:
+          type: number
+          example: 571700
+          description: Unique identifier of the account
+        name:
+          type: string
+          example: Vonage
+          description: Name of the account
+        status:
+          type: string
+          example: ACTIVE
+          description: Status of the account
+        address:
+          $ref: '#/components/schemas/Address'
+      type: object
+    Address:
+      type: object
+      properties:
+        address_1:
+          type: string
+          example: 123 Example Street
+          description: Street portion of the address
+        address_2:
+          type: string
+          example: Apt. 456
+          description: Additional address information
+        country:
+          type: string
+          example: US
+          description: Country code
+        state:
+          type: string
+          example: NJ
+          description: State/Province code
+        city:
+          type: string
+          example: Holmdel
+          description: City name
+        postal_code:
+          type: string
+          example: '07733'
+          description: Postal code
+    AccountEmbeddedObject:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Account'
+      description: Account object
+    AddressWithTimeZone:
+      type: object
+      properties:
+        address_1:
+          type: string
+          example: 123 Example Street
+          description: Street portion of the address
+        address_2:
+          type: string
+          example: Apt. 456
+          description: Additional address information
+        country:
+          type: string
+          example: US
+          description: Country code
+        state:
+          type: string
+          example: NJ
+          description: State/Province code
+        city:
+          type: string
+          example: Holmdel
+          description: City name
+        postal_code:
+          type: string
+          example: '07733'
+          description: Postal code
+        time_zone:
+          type: string
+          example: America/New York
+          description: Time zone
+    LocationsEmbeddedObject:
+      type: object
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Location'
+          type: array
+      description: Collection of location objects
+    LocationEmbeddedObject:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/Location'
+      description: Location object
+    AccountHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 100
+          description: Number of records per page
+        page:
+          type: number
+          example: 1
+          description: Current page number
+        total_pages:
+          type: number
+          example: 10
+          description: Total number of pages
+        total_items:
+          type: number
+          example: 100
+          description: Total number of records
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/AccountEmbeddedObject'
+    LocationHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 100
+          description: Number of records per page
+        page:
+          type: number
+          example: 1
+          description: Current page number
+        total_pages:
+          type: number
+          example: 10
+          description: Total number of pages
+        total_items:
+          type: number
+          example: 100
+          description: Total number of records
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/LocationEmbeddedObject'
+    LocationsHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 100
+        page:
+          type: number
+          example: 1
+        total_pages:
+          type: number
+          example: 10
+        total_items:
+          type: number
+          example: 100
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/LocationsEmbeddedObject'
+    Links:
+      type: object
+      properties:
+        first:
+          $ref: '#/components/schemas/FirstHref'
+        prev:
+          $ref: '#/components/schemas/PrevHref'
+        self:
+          $ref: '#/components/schemas/SelfHref'
+        next:
+          $ref: '#/components/schemas/NextHref'
+        last:
+          $ref: '#/components/schemas/LastHref'
+    BasicUser:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique ID of the user
+          example: 2111111
+        email:
+          type: string
+          description: Email address of the user
+          example: john.smith@example.com
+        login_name:
+          type: string
+          description: Login name of the user
+          example: jsmith
+        first_name:
+          type: string
+          description: First name of the user
+          example: John
+        last_name:
+          type: string
+          description: Last name of the user
+          example: Smith
+    DID:
+      type: object
+      properties:
+        phone_number:
+          type: string
+          description: Phone number
+          example: '14155550100'
+        custom_tag:
+          type: string
+          description: Custom tag associated with the phone number
+          example: My Tag
+    Line:
+      type: object
+      properties:
+        handset_name:
+          type: string
+          description: Name of the handset
+          example: line1-VH6370927
+        sip_id:
+          type: string
+          description: SIP identifier of the handset
+          example: VH16370927
+    EndUserRoute:
+      type: object
+      properties:
+        extension_number:
+          type: string
+          description: Extension number
+          example: '789'
+        user:
+          $ref: '#/components/schemas/BasicUser'
+        location-id:
+          type: number
+          description: Unique identifier of the assigned location
+          example: 145214
+        vtt_enabled:
+          type: boolean
+          description: Voicemail transcription status of the location
+          example: true
+        dnd_enabled:
+          type: boolean
+          description: Do Not Disturb status of the extension
+          example: false
+        caller_id:
+          type: string
+          description: Caller ID of the extension
+          example: John Smith
+        external-id:
+          type: string
+          description: The unique identifier of the extension
+          example: abc11111111111
+        block_caller_id:
+          type: boolean
+          description: Block Caller ID status of the extension
+          example: false
+        dids:
+          items:
+            $ref: '#/components/schemas/DID'
+          type: array
+          description: Collection of phone numbers assigned to the extension
+        extension_handsets:
+          items:
+            $ref: '#/components/schemas/Line'
+          type: array
+          description: Collection of handsets assigned to the extension
+    EndUserRouteEmbeddedObject:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/EndUserRoute'
+    EndUserRouteHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+          description: Number of records per page
+        page:
+          type: number
+          example: 1
+          description: Current page number
+        total_pages:
+          type: number
+          example: 10
+          description: Total number of pages
+        total_items:
+          type: number
+          example: 100
+          description: Total number of records
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/EndUserRouteEmbeddedObject'
+    Contact:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Contact type
+          example: pstn
+          enum:
+          - device
+          - extension
+          - pstn
+        value:
+          type: string
+          description: Contact value
+          example: '14155550100'
+        destination:
+          type: string
+          example: 1234567890
+    UserExtension:
+      type: object
+      properties:
+        dids:
+          items:
+            $ref: '#/components/schemas/DID'
+          type: array
+          description: Collection of phone numbers assigned to the extension
+        extension_number:
+          type: string
+          description: Extension number
+          example: '789'
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email address of the user
+          example: john.smith@example.com
+        login_name:
+          type: string
+          description: Login name of the user
+          example: jsmith
+        first_name:
+          type: string
+          description: First name of the user
+          example: John
+        last_name:
+          type: string
+          description: Last name of the user
+          example: Smith
+        id:
+          type: number
+          description: Unique identifier of the user
+          example: 869048
+        contact_numbers:
+          items:
+            $ref: '#/components/schemas/Contact'
+          type: array
+          description: Collection of contact objects
+        extensions:
+          items:
+            $ref: '#/components/schemas/UserExtension'
+          type: array
+          description: Collection of extension objects
+    UsersEmbeddedObject:
+      type: object
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+    UserEmbeddedObject:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/User'
+    UserHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+          description: Number of records per page
+        page:
+          type: number
+          example: 1
+          description: Current page number
+        total_pages:
+          type: number
+          example: 10
+          description: Total number of pages
+        total_items:
+          type: number
+          example: 100
+          description: Total number of records
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/UserEmbeddedObject'
+    UsersHalResponse:
+      type: object
+      properties:
+        page_size:
+          type: number
+          example: 10
+          description: Number of records per page
+        page:
+          type: number
+          example: 1
+          description: Current page number
+        total_pages:
+          type: number
+          example: 10
+          description: Total number of pages
+        total_items:
+          type: number
+          example: 100
+          description: Total number of records
+        _links:
+          $ref: '#/components/schemas/Links'
+        _embedded:
+          $ref: '#/components/schemas/UsersEmbeddedObject'
+    ErrorResponse:
+      type: object
+      properties:
+        msg:
+          description: Error message
+          type: string
+        status:
+          description: Http Response Code
+          type: number
+    ValidationErrorsResponse:
+      type: object
+      properties:
+        status:
+          description: Error status code
+          type: number
+        title:
+          description: Error title
+          type: string
+        instance:
+          description: Error Track ID
+          type: string
+        invalid_parameters:
+          items:
+            $ref: '#/components/schemas/DetailedInvalidParam'
+          description: Invalid parameters and their reason for failing
+          type: array
+    DetailedInvalidParam:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Invalid property name
+        reason:
+          type: string
+          description: Invalid property reason
+    AltEndUserRouteHalResponse:
+      type: object
+      properties:
+        _links:
+          $ref: '#/components/schemas/AltLinks'
+        _embedded:
+          $ref: '#/components/schemas/AltEndUserRouteEmbeddedObject'
+    AltLinks:
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/SelfHref'
+    AltEndUserRouteEmbeddedObject:
+      type: object
+      properties:
+        extension:
+          $ref: '#/components/schemas/AltEndUserRoute'
+    AltEndUserRoute:
+      type: object
+      properties:
+        extension_number:
+          type: string
+          description: Extension number
+          example: '789'
+        user:
+          $ref: '#/components/schemas/BasicUser'
+        location-id:
+          type: number
+          description: Unique identifier of the assigned location
+          example: 145214
+        vtt_enabled:
+          type: boolean
+          description: Voicemail transcription status of the location
+          example: true
+        dnd_enabled:
+          type: boolean
+          description: Do Not Disturb status of the extension
+          example: false
+        caller_id:
+          type: string
+          description: Caller ID of the extension
+          example: John Smith
+        external-id:
+          type: string
+          description: The unique identifier of the extension
+          example: abc11111111111
+        service_type_name:
+          type: string
+          description: Service type name of the extension
+          example: UX
+        block_caller_id:
+          type: boolean
+          description: Block Caller ID status of the extension
+          example: false
+        dids:
+          items:
+            $ref: '#/components/schemas/DID'
+          type: array
+          description: Collection of phone numbers assigned to the extension
+        extension_handsets:
+          items:
+            $ref: '#/components/schemas/Line'
+          type: array
+          description: Collection of handsets assigned to the extension
+    AccountsRegPaginated:
+      type: object
+      properties:
+        current_page:
+          type: string
+          example: 1
+        devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegistrationInfo'
+        first_page_uri:
+          type: string
+          example: /registration/accounts/1234/devices?page_size=100&order=desc
+        next_page:
+          type: string
+        next_page_uri:
+          type: string
+          example: /registration/accounts/1234/devices?page_size=100&order=desc
+        order:
+          type: string
+          example: desc
+        page_size:
+          type: string
+          example: 10
+        pages:
+          type: string
+          example: 2
+        previous_page_uri:
+          type: string
+          example: /registration/accounts/1234/devices?page_size=100&order=desc
+    AuthorizationErrorMessage:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: User is not permitted to make a request against this account
+    Call:
+      type: object
+      properties:
+        account-id:
+          type: string
+          example: 1234
+        call-id:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        direction:
+          type: string
+          enum:
+          - inbound
+          - outbound
+          example: inbound
+        end_time:
+          type: string
+          format: date-time
+          example: 1595959736
+        from:
+          type: string
+          example: 1235551111
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallLeg'
+        start_time:
+          type: string
+          format: date-time
+          example: 1595959736
+        status:
+          type: string
+          enum:
+          - busy
+          - failed
+          - unanswered
+          - ringing
+          - on-call
+          example: busy
+        to:
+          type: string
+          example: 1234567890
+    CallLeg:
+      type: object
+      properties:
+        account-id:
+          type: string
+          description: Account that this call leg belongs to
+          example: 1234
+        call-id:
+          type: string
+          description: Call Id this call belongs to
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        direction:
+          type: string
+          description: Leg direction - either "inbound" or "outbound"
+          enum:
+          - inbound
+          - outbound
+          example: inbound
+        end_time:
+          type: string
+          description: Call end time (if applicable)
+          format: date-time
+          example: 1595959736
+        from:
+          type: string
+          description: The "from" DID or extension
+          example: 1231112222
+        leg-id:
+          type: string
+          description: Globally unique leg Id
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        start_time:
+          type: string
+          description: Call start time
+          format: date-time
+          example: 1595959736
+        status:
+          type: string
+          description: current leg status
+          enum:
+          - busy
+          - failed
+          - unanswered
+          - ringing
+          - on-call
+          example: busy
+        to:
+          type: string
+          description: The "to" DID or extension
+          example: 1234567890
+      description: Object representation of a call leg
+    CallLegList:
+      type: array
+      items:
+        $ref: '#/components/schemas/CallLeg'
+    CallList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Call'
+    CallPostRequestBody:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/CreateCallContactFrom'
+        to:
+          $ref: '#/components/schemas/CreateCallContact'
+        type:
+          type: string
+          enum:
+          - click2dial
+          - click2dialme
+          - odr
+          - default
+          example: click2dial
+    CallPutRequestBody:
+      type: object
+      properties:
+        from:
+          $ref: '#/components/schemas/Contact'
+        state:
+          type: string
+          enum:
+          - active
+          - parked
+        to:
+          $ref: '#/components/schemas/Contact'
+    CallsPaginated:
+      type: object
+      properties:
+        calls:
+          $ref: '#/components/schemas/CallList'
+        current_page:
+          type: string
+          example: 0
+        first_page_uri:
+          type: string
+          example: /v1/accounts/1234/calls?page_size=0&order=desc
+        next_page:
+          type: string
+          example: 1
+        next_page_uri:
+          type: string
+          example: /v1/accounts/1234/calls?page_size=0&order=desc
+        order:
+          type: string
+          example: desc
+        page_size:
+          type: string
+          example: 1
+        pages:
+          type: string
+          example: 1
+        previous_page_uri:
+          type: string
+          example: /v1/accounts/1234/calls?page_size=0&order=desc
+    CreateCallContact:
+      type: object
+      properties:
+        destination:
+          type: string
+          example: 1234567890
+        type:
+          type: string
+          enum:
+          - device
+          - extension
+          - pstn
+          - feature_code
+          example: pstn
+    CreateCallContactFrom:
+      type: object
+      properties:
+        destination:
+          type: string
+          example: 1234
+        type:
+          type: string
+          enum:
+          - device
+          - extension
+          - feature_code
+          example: extension
+    LegAttTransferRequestBody:
+      type: object
+      properties:
+        to:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    LegBlindTransferRequestBody:
+      type: object
+      properties:
+        to:
+          $ref: '#/components/schemas/Contact'
+    LegDTMFRequestBody:
+      type: object
+      properties:
+        dtmf:
+          type: string
+    LegHoldRequestBody:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+          - held
+    LegUnholdRequestBody:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+          - active
+    ModifyCallResponse:
+      type: object
+      properties:
+        account-id:
+          type: string
+          format: integer
+          example: 1234
+        call-id:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        call_state:
+          type: string
+        destination:
+          type: string
+    ModifyLegResponse:
+      type: object
+      properties:
+        account-id:
+          type: string
+          format: integer
+          example: 1234
+        call-id:
+          type: string
+          format: uuid
+        call_state:
+          type: string
+        destination:
+          type: string
+        leg-id:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    NotFoundMessage:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 401
+        message:
+          type: string
+          example: No matching resource found for given API Request
+    RegistrationInfo:
+      type: object
+      properties:
+        account-id:
+          type: string
+          example: 1234
+        device_ip:
+          type: string
+          example: 150.24.83.17
+        last_request:
+          type: string
+          example: 1595937421
+        last_success:
+          type: string
+          example: 1595937421
+        mac_address:
+          type: string
+          example: 79-5C-7D-28-1B-B3
+        registration:
+          $ref: '#/components/schemas/RegistrationTime'
+        provisioned:
+          $ref: '#/components/schemas/ProvisionedTime'
+    RegistrationTime:
+      type: object
+      properties:
+        last_success:
+          type: string
+          example: 1595937421
+    ProvisionedTime:
+      type: object
+      properties:
+        last_success:
+          type: string
+          example: 1595937421
+        last_request:
+          type: string
+          example: 1595937421
+    StatusMessage:
+      type: string
+      example: e2610a31-88be-4f12-90c0-ee98dbfaf80b
+    ValidationErrorMessage:
+      type: object
+      properties:
+        code:
+          type: string
+          example: 400
+        message:
+          type: string
+          example: Invalid request parameters
+  responses:
+    ParseError:
+      description: When a mask can't be parsed
+      content: {}
+    MaskError:
+      description: When any error occurs on mask
+      content: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: OAuth
+  parameters:
+    AccountID:
+      in: path
+      name: account-id
+      required: true
+      schema:
+        type: string
+      description: The Vonage Business Communications account ID

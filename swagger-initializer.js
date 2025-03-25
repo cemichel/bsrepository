@@ -1,6 +1,6 @@
 window.onload = () => {
   window.ui = SwaggerUIBundle({
-    url: "provisioning.json",  // 👈 make sure this matches your file name
+    url: "vbc-open-api-specs.yaml",  // 👈 make sure this matches your file name
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
